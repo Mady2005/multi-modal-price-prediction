@@ -32,7 +32,6 @@ services:
           type: web
           name: smart-pricing-api
           envVarKey: RENDER_EXTERNAL_URL
-        sync: false
       - key: PYTHON_VERSION
         value: 3.9.0
 
