@@ -1,13 +1,11 @@
-services:
+databases:
   # PostgreSQL Database
-  - type: pserv
-    name: pricing-database
-    env: docker
+  - name: pricing-data
+    databaseName: pricing_data
+    user: pricing_user
     plan: free
-    databases:
-      - name: pricing_data
-        databaseName: pricing_data
-        user: pricing_user
+
+services:
 
   # FastAPI Backend Service
   - type: web
@@ -48,7 +46,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: pricing_data
+          name: pricing-data
           property: connectionString
       - key: PYTHON_VERSION
         value: 3.9.0
