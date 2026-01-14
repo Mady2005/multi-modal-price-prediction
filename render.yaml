@@ -1,0 +1,54 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: pricing-database
+    env: docker
+    plan: free
+    databases:
+      - name: pricing_data
+        databaseName: pricing_data
+        user: pricing_user
+
+  # FastAPI Backend Service
+  - type: web
+    name: smart-pricing-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port 8000
+    healthCheckPath: /docs
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+
+  # Streamlit Frontend Service
+  - type: web
+    name: smart-pricing-frontend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run frontend.py --server.port 8501 --server.address 0.0.0.0
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: smart-pricing-api
+          envVarKey: RENDER_EXTERNAL_URL
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.9.0
+
+  # Streamlit Dashboard Service
+  - type: web
+    name: smart-pricing-dashboard
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run dashboard.py --server.port 8501 --server.address 0.0.0.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pricing_data
+          property: connectionString
+      - key: PYTHON_VERSION
+        value: 3.9.0

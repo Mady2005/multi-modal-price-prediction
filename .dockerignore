@@ -1,0 +1,5 @@
+__pycache__
+*.csv
+.git
+.ipynb_checkpoints
+price_prediction_model.ipynb
