@@ -205,3 +205,8 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Kiro
+# Kiro is an AI-powered IDE. The .kiro directory contains specs, tasks, and local configuration.
+# These files are for development workflow and should not be committed to version control.
+.kiro/
